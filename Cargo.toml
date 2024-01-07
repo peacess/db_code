@@ -1,0 +1,29 @@
+[workspace.package]
+version = "0.1.1"
+edition = "2021"
+
+[workspace]
+resolver = "2"
+members=[
+    "db_macro","db_code","sample"
+]
+
+[workspace.dependencies]
+log = { version = "0.4.20", features = ["max_level_debug", "release_max_level_info"] }
+chrono = "0.4.31"
+rust_kits = { version = "0.1.1", git = "https://github.com/peacess/rust.git" }
+sqlx = { version = "0.7.3", features = [ "runtime-tokio-rustls" , "sqlite" ] }
+xid = "1.0.3"
+tokio = { version = "1.35.1", features = ["full"] }
+
+
+#[lib]
+#name="db_code"
+#path="./lib.rs"
+
+[profile.release]
+opt-level = 3
+strip = false
+overflow-checks = true
+codegen-units = 1
+lto = false

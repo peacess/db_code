@@ -1,0 +1,19 @@
+[package]
+name = "db_code"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+log = {workspace = true}
+chrono = {workspace  =true}
+sqlx = {workspace = true}
+xid = {workspace = true}
+rust_kits = {workspace = true}
+
+db_macro = {path = "../db_macro"}
+
+[lib]
+name="db_code"
+path="./lib.rs"
