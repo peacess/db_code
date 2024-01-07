@@ -1,10 +1,9 @@
 use std::sync::Arc;
 
+use db_code::dao::{Dao, KitsDb, Times};
 use sqlx::{Pool, Sqlite, SqlitePool};
 use sqlx::query::Query;
 use sqlx::sqlite::SqliteArguments;
-
-use db_code::dao::{Dao, KitsDb, Times};
 
 use crate::CbTable;
 
@@ -14,8 +13,7 @@ CbTableDao {
     pool: Arc<Pool<Sqlite>>,
 }
 
-impl CbTableDao
-{
+impl CbTableDao {
     pub const TT: &'static str = "cb_table";
     pub const T_ID: &'static str = "id";
     pub const T_UPDATE_TS: &'static str = "update_ts";
@@ -35,12 +33,10 @@ impl CbTableDao
         format!("insert into {}({}) values ({})", CbTableDao::TT, CbTableDao::
         columns(), vs.join(","))
     }
-    fn sql_remove() -> String
-    {
+    fn sql_remove() -> String {
         format!("delete from {} where {} = ?", CbTableDao::TT, CbTableDao::T_ID)
     }
-    fn sql_remove_all() -> String
-    { format!("delete from {}", CbTableDao::TT) }
+    fn sql_remove_all() -> String { format!("delete from {}", CbTableDao::TT) }
     fn sql_update() -> String {
         let vs = CbTableDao::columns_no_id().join(" = ?, ") + " = ?";
         format!("update {} set {} where {} = ?", CbTableDao::TT, vs, CbTableDao::
@@ -52,7 +48,8 @@ impl CbTableDao
         format!("update {} set {} where {} = ? and {} = ?", CbTableDao::TT, vs,
                 CbTableDao::T_ID, CbTableDao::T_VERSION)
     }
-    fn sql_list() -> String {
+    fn sql_list() -> String
+    {
         format!("select {} from {}", CbTableDao::columns(), CbTableDao::TT)
     }
     pub(super) fn _bind_add<'a>
@@ -77,8 +74,7 @@ impl Dao<CbTable> for CbTableDao
     fn
     new(pool: Arc<SqlitePool>) -> Self { Self { pool } }
     async fn
-    add(&self, m: &mut CbTable) -> Result<u64, sqlx::Error>
-    {
+    add(&self, m: &mut CbTable) -> Result<u64, sqlx::Error> {
         if m.id.is_empty() { m.id = KitsDb::uuid(); }
         if m.update_ts < 1
         { m.update_ts = Times::ts_now(); }
@@ -87,33 +83,25 @@ impl Dao<CbTable> for CbTableDao
         _bind_add(m, sqlx::query(&sql)).execute(self.pool()).await?;
         Ok(re.rows_affected())
     }
-    async fn remove(&self, id: &str) -> Result<u64, sqlx::Error>
-    {
+    async fn remove(&self, id: &str) -> Result<u64, sqlx::Error> {
         let sql = Self::sql_remove();
         let re = sqlx::
         query(&sql).bind(id).execute(self.pool()).await?;
         Ok(re.rows_affected())
     }
-    async fn remove_all(&self) -> Result<u64, sqlx::Error>
-    {
+    async fn remove_all(&self) -> Result<u64, sqlx::Error> {
         let sql = Self::sql_remove_all();
         let re = sqlx::
         query(&sql).execute(self.pool()).await?;
         Ok(re.rows_affected())
     }
-    async fn update(&self, m: &mut CbTable) -> Result<u64, sqlx::
-    Error>
-    {
+    async fn update(&self, m: &mut CbTable) -> Result<u64, sqlx::Error> {
         let sql = Self::sql_update();
         m.update_ts = Times::ts_now();
-        let
-            re = Self::
-        _bind_update(m, sqlx::query(&sql)).execute(self.pool()).await?;
+        let re = Self::_bind_update(m, sqlx::query(&sql)).execute(self.pool()).await?;
         Ok(re.rows_affected())
     }
-    async fn update_ol(&self, m: &mut CbTable) -> Result<u64, sqlx::
-    Error>
-    {
+    async fn update_ol(&self, m: &mut CbTable) -> Result<u64, sqlx::Error> {
         let sql = Self::sql_update_ol();
         m.update_ts = Times::ts_now();
         let re = Self::
@@ -121,16 +109,13 @@ impl Dao<CbTable> for CbTableDao
             ;
         Ok(re.rows_affected())
     }
-    async fn get(&self, id: &str) -> Result<Option<CbTable>, sqlx::
-    Error>
-    {
+    async fn get(&self, id: &str) -> Result<Option<CbTable>, sqlx::Error> {
         let sql = Self::sql_get();
         let condition = sqlx::query_as::<_,
             CbTable>(&sql).bind(id).fetch_optional(self.pool()).await?;
         Ok(condition)
     }
-    async fn list(&self) -> Result<Vec<CbTable>, sqlx::Error>
-    {
+    async fn list(&self) -> Result<Vec<CbTable>, sqlx::Error> {
         let sql = Self::sql_list();
         let rows = sqlx::
         query_as(&sql).fetch_all(self.pool()).await?;
@@ -142,20 +127,15 @@ impl Dao<CbTable> for CbTableDao
 mod tests
 {
     use db_code::dao::{Dao, KitsDb};
+
     use crate::CbTable;
-    use super::CbTableDao;
 
     #[tokio::test]
-    async fn cb_table_dao()
-    {
-        let pool = KitsDb::
-        new_with_name("cb_table_dao.db", "init/sql.sql").await.expect("");
+    async fn cb_table_dao() {
+        let pool = KitsDb::new_with_name("cb_table_dao.db", "init/sql.sql").await.expect("");
         let dao_ = CbTableDao::new(pool);
-        let mut m = CbTable{
-            id: "".to_string(),
-            update_ts: 0,
-            version: 0,
-        };
+        let mut m = CbTable::default()
+            ;
         {
             dao_.remove_all().await.expect("");
             dao_.remove(&m.id).await.expect("");

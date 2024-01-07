@@ -15,7 +15,7 @@ proc_macro_roids = "0.8.0"
 
 [lib]
 proc-macro = true
-path="./lib.rs"
+path = "./lib.rs"
 
 [features]
 default = ["sql", "dao"]

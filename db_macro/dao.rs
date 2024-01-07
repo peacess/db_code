@@ -1,9 +1,9 @@
+use std::{fs, path};
 use std::io::Write;
 use std::ops::Add;
-use std::{fs, path};
 
 use proc_macro_roids::IdentExt;
-use quote::quote;
+use quote::{format_ident, quote};
 
 use super::db_meta::TableMeta;
 use super::kits::to_snake_name;
@@ -19,8 +19,8 @@ pub fn generate_dao(tm: &TableMeta) {
         tm.col_names[1..]
             .iter()
             .map(|col| {
-                let v = format!("T_{}", col.to_uppercase());
-                let id = syn::Ident::new(&v, m_name.span());
+                let id = format_ident!("T_{}", col.to_uppercase());
+                // let id = syn::Ident::new(&v, m_name.span());
                 quote! { #dao_name::#id}
             })
             .collect()
@@ -31,9 +31,8 @@ pub fn generate_dao(tm: &TableMeta) {
         tm.col_names
             .iter()
             .map(|col| {
-                let up = col.to_uppercase();
-                let v = format!("T_{}", up);
-                let id = syn::Ident::new(&v, m_name.span());
+                let id = format_ident!("T_{}", col.to_uppercase());
+                // let id = syn::Ident::new(&v, m_name.span());
                 quote! {pub const #id : &'static str = #col}
             })
             .collect()
@@ -44,7 +43,8 @@ pub fn generate_dao(tm: &TableMeta) {
         let id = syn::Ident::new(&tm.col_names[0], m_name.span());
         t.push(quote!(q.bind(&m.#id)));
         tm.col_names[1..].iter().for_each(|col| {
-            let id = syn::Ident::new(col, m_name.span());
+            // let id = syn::Ident::new(col, m_name.span());
+            let id = format_ident!("{}", col);
             t.push(quote!(.bind(&m.#id)))
         });
         t
@@ -55,26 +55,32 @@ pub fn generate_dao(tm: &TableMeta) {
         let id = syn::Ident::new(&tm.col_names[1], m_name.span());
         t.push(quote!(q.bind(&m.#id)));
         tm.col_names[2..].iter().for_each(|col| {
-            let id = syn::Ident::new(col, m_name.span());
+            // let id = syn::Ident::new(col, m_name.span());
+            let id = format_ident!("{}", col);
             t.push(quote!(.bind(&m.#id)));
         });
-        let id = syn::Ident::new(&tm.col_names[0], m_name.span());
+        // let id = syn::Ident::new(&tm.col_names[0], m_name.span());
+        let id = format_ident!("{}", &tm.col_names[0]);
         t.push(quote!(.bind(&m.#id)));
         t
     };
     let update_bind_ol = {
         let mut t = Vec::new();
-        let id = syn::Ident::new(&tm.col_names[1], m_name.span());
+        // let id = syn::Ident::new(&tm.col_names[1], m_name.span());
+        let id = format_ident!("{}", &tm.col_names[1]);
         t.push(quote!(q.bind(&m.#id)));
         tm.col_names[2..].iter().for_each(|col| {
             if col != "version" {
-                let id = syn::Ident::new(col, m_name.span());
+                // let id = syn::Ident::new(col, m_name.span());
+                let id = format_ident!("{}", col);
                 t.push(quote!(.bind(&m.#id)));
             }
         });
-        let id = syn::Ident::new(&tm.col_names[0], m_name.span());
+        // let id = syn::Ident::new(&tm.col_names[0], m_name.span());
+        let id = format_ident!("{}", &tm.col_names[0]);
         t.push(quote!(.bind(&m.#id)));
-        let id = syn::Ident::new("version", m_name.span());
+        // let id = syn::Ident::new("version", m_name.span());
+        let id = format_ident!("version");
         t.push(quote!(.bind(&m.#id)));
         t
     };
@@ -215,9 +221,9 @@ pub fn generate_dao(tm: &TableMeta) {
 
         #[cfg(test)]
         mod tests {
-            use db_code::dao::{Dao, KitsDb};
+            use self::super::#dao_name;
             use crate::#m_name;
-            use super::#dao_name;
+            use db_code::dao::{Dao, KitsDb};
 
             #[tokio::test]
             async fn #test_name() {
