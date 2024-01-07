@@ -16,7 +16,7 @@ sqlx.workspace = true
 xid = {workspace = true}
 rust_kits.workspace = true
 
-db_code_macro = {version = "0.1.2", git = "https://github.com/peacess/rust.git"}
+db_code_macro = {version = "0.1.2", git = "https://github.com/peacess/db_code.git"}
 
 [lib]
 name="db_code"
