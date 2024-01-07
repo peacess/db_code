@@ -1,11 +1,17 @@
 [workspace.package]
 version = "0.1.1"
 edition = "2021"
+authors = ["Andy <peacess@163.com>"]
+description = "Door Player, Cross by ffmpeg and egui"
+repository = "https://github.com/peacess/door_player"
+homepage = "https://github.com/peacess/door_player"
+keywords = ["rust", "db","generate","sql","code"]
+license = "Apache-2.0"
 
 [workspace]
 resolver = "2"
 members=[
-    "db_macro","db_code","sample"
+    "db_macro","code","sample"
 ]
 
 [workspace.dependencies]

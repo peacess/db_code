@@ -1,5 +1,5 @@
 [package]
-name = "db_code_sample"
+name = "db_code"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
@@ -12,9 +12,14 @@ license.workspace = true
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-db_code = {path = "../code" }
+log.workspace = true
+chrono.workspace = true
+sqlx.workspace = true
+xid = {workspace = true}
+rust_kits.workspace = true
 
-sqlx = { workspace = true }
+db_code_macro = {path = "../db_macro"}
 
-[dev-dependencies]
-tokio = { workspace = true }
+[lib]
+name="db_code"
+path="./lib.rs"

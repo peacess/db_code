@@ -1,4 +1,4 @@
-use db_code::db_macro::{DbDao, DbSub};
+use db_code::db_code_macro::{DbDao, DbSub};
 
 mod dao;
 
