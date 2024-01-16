@@ -264,7 +264,6 @@ name = "db_code"
 version = "0.1.3"
 dependencies = [
  "chrono",
- "db_code_macro 0.1.3 (git+https://github.com/peacess/db_code.git)",
  "log",
  "rust_kits",
  "sqlx",
@@ -283,22 +282,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "db_code_macro"
-version = "0.1.3"
-source = "git+https://github.com/peacess/db_code.git#0a3bfa2d417402ec99d0d1f4950b54d47f28e19d"
-dependencies = [
- "log",
- "proc-macro2",
- "proc_macro_roids",
- "quote",
- "syn 2.0.48",
-]
-
-[[package]]
 name = "db_code_sample"
 version = "0.1.3"
 dependencies = [
  "db_code",
+ "db_code_macro",
  "sqlx",
  "tokio",
 ]

@@ -16,12 +16,6 @@ sqlx.workspace = true
 xid = {workspace = true}
 rust_kits.workspace = true
 
-db_code_macro = {version = "0.1.3",default-features = false, git = "https://github.com/peacess/db_code.git"}
-
-[features]
-default = ["db_code_macro/default"]
-sql = ["db_code_macro/sql"]
-dao = ["db_code_macro/dao"]
 
 [lib]
 name="db_code"
