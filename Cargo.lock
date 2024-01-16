@@ -268,7 +268,7 @@ name = "db_code"
 version = "0.1.3"
 dependencies = [
  "chrono",
- "db_code_macro 0.1.2",
+ "db_code_macro 0.1.3 (git+https://github.com/peacess/db_code.git)",
  "log",
  "rust_kits",
  "sqlx",
@@ -281,7 +281,7 @@ version = "0.1.3"
 source = "git+https://github.com/peacess/db_code.git#62e0db1dca7b9029e6fe27d9ef7f92c46853df56"
 dependencies = [
  "chrono",
- "db_code_macro 0.1.2",
+ "db_code_macro 0.1.3 (git+https://github.com/peacess/db_code.git)",
  "log",
  "rust_kits",
  "sqlx",
@@ -290,8 +290,7 @@ dependencies = [
 
 [[package]]
 name = "db_code_macro"
-version = "0.1.2"
-source = "git+https://github.com/peacess/db_code.git#7d7fde25eeade26be5eb41a2971a7d9a53e2acbd"
+version = "0.1.3"
 dependencies = [
  "log",
  "proc-macro2",
@@ -303,6 +302,7 @@ dependencies = [
 [[package]]
 name = "db_code_macro"
 version = "0.1.3"
+source = "git+https://github.com/peacess/db_code.git#9ccc8f88e8afce5139223b05c28ad6e1ba886715"
 dependencies = [
  "log",
  "proc-macro2",
