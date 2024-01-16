@@ -135,9 +135,11 @@ impl DbMeta {
                 // }
                 all_sql.push_str(tm.sql.as_str());
             }
-
-            let all_file = get_path("sql.sql");
-            recreate_file(all_sql.as_str(), all_file.as_str());
+            #[cfg(feature = "sql")]
+            {
+                let all_file = get_path("sql.sql");
+                recreate_file(all_sql.as_str(), all_file.as_str());
+            }
         }
     }
 
