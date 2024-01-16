@@ -12,7 +12,7 @@ license.workspace = true
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-db_code = {path = "../code" }
+db_code = {path = "../code", default-features = false,features = ["dao"] }
 
 sqlx = { workspace = true }
 
