@@ -12,7 +12,8 @@ license.workspace = true
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-db_code = {path = "../code", default-features = false,features = ["dao"] }
+#db_code = {path = "../code", default-features = false,features = ["dao"] }
+db_code = { version = "0.1.3", git = "https://github.com/peacess/db_code.git", default-features = false,features = ["dao"]}
 
 sqlx = { workspace = true }
 
