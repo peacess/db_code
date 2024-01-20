@@ -1,12 +1,12 @@
-use std::{fs, path};
 use std::fs::File;
 use std::str::FromStr;
 use std::sync::Arc;
+use std::{fs, path};
 
 use log::LevelFilter;
 use rust_kits::Executor;
-use sqlx::{ConnectOptions, Pool, Sqlite};
 use sqlx::sqlite::{SqliteConnectOptions, SqlitePoolOptions};
+use sqlx::{ConnectOptions, Pool, Sqlite};
 
 pub struct KitsDb {}
 

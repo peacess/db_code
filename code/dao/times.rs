@@ -1,4 +1,4 @@
-use chrono::{Datelike, DateTime, FixedOffset, Local, NaiveDateTime, TimeZone, Utc};
+use chrono::{DateTime, Datelike, FixedOffset, Local, NaiveDateTime, TimeZone, Utc};
 
 pub struct Times;
 

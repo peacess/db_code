@@ -1,8 +1,8 @@
-use std::{fs, path};
 use std::cell::OnceCell;
 use std::collections::{BTreeMap, HashMap};
 use std::io::Write;
 use std::sync::Mutex;
+use std::{fs, path};
 
 use proc_macro_roids::DeriveInputStructExt;
 use syn::{
@@ -10,7 +10,7 @@ use syn::{
     TypePath,
 };
 
-use crate::{CARGO_BUILD_DIR_SQL, dao};
+use crate::{dao, CARGO_BUILD_DIR_SQL};
 
 use super::kits::to_snake_name;
 
@@ -137,7 +137,7 @@ impl DbMeta {
             }
             #[cfg(feature = "sql")]
             {
-                let all_file = get_path("sql.sql");
+                let all_file = get_path("sql_.sql");
                 recreate_file(all_sql.as_str(), all_file.as_str());
             }
         }
@@ -188,8 +188,8 @@ fn generate_table_script(type_name: &str, fields: &Fields) -> TableMeta {
                 match arguments {
                     PathArguments::None => ident.to_string(),
                     PathArguments::AngleBracketed(AngleBracketedGenericArguments {
-                                                      args, ..
-                                                  }) => {
+                        args, ..
+                    }) => {
                         if let Some(GenericArgument::Type(Type::Path(TypePath { path, .. }))) =
                             args.last()
                         {
@@ -313,7 +313,7 @@ fn generate_table_script(type_name: &str, fields: &Fields) -> TableMeta {
             "CREATE TABLE IF NOT EXISTS {} (  \n",
             gen_table_name(type_name)
         )
-            .as_str(),
+        .as_str(),
     );
     template.push_str(" );\n");
     tm.template = template;
@@ -377,7 +377,7 @@ fn get_path(short_name: &str) -> String {
 #[cfg(test)]
 mod tests {
     // use proc_macro_roids::FieldExt;
-    use syn::{Fields, FieldsNamed, parse_quote};
+    use syn::{parse_quote, Fields, FieldsNamed};
 
     #[test]
     fn generate_table_script() {
