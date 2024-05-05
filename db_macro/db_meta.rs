@@ -5,10 +5,7 @@ use std::sync::Mutex;
 use std::{fs, path};
 
 use proc_macro_roids::DeriveInputStructExt;
-use syn::{
-    AngleBracketedGenericArguments, Fields, GenericArgument, PathArguments, PathSegment, Type,
-    TypePath,
-};
+use syn::{AngleBracketedGenericArguments, Fields, GenericArgument, PathArguments, PathSegment, Type, TypePath};
 
 use crate::{dao, CARGO_BUILD_DIR_SQL};
 
@@ -146,8 +143,7 @@ impl DbMeta {
     /// 生成创建表的语句
     fn generate_table_meta(&mut self, ast: &syn::DeriveInput) -> TableMeta {
         let mut tm = generate_table_script(&ast.ident.to_string(), ast.fields());
-        tm.template
-            .insert_str(0, format!("-- {}\n", ast.ident).as_str());
+        tm.template.insert_str(0, format!("-- {}\n", ast.ident).as_str());
         tm.derive_input = Some(ast.clone());
         tm
     }
@@ -162,10 +158,7 @@ impl DbMeta {
 fn gen_table_name(type_name: &str) -> String {
     let mut type_name = type_name.to_owned();
     let names: Vec<&str> = type_name.split("::").collect();
-    type_name = names
-        .last()
-        .expect("gen_table_name -- names.last()")
-        .to_string();
+    type_name = names.last().expect("gen_table_name -- names.last()").to_string();
     type_name = to_snake_name(&type_name);
     type_name
 }
@@ -178,57 +171,39 @@ fn generate_table_script(type_name: &str, fields: &Fields) -> TableMeta {
     };
     let mut cols = String::new();
     'FieldsFor: for field in fields {
-        let col_name = field
-            .ident
-            .as_ref()
-            .expect("field.ident.as_ref()")
-            .to_string();
+        let col_name = field.ident.as_ref().expect("field.ident.as_ref()").to_string();
         let type_name = if let Type::Path(TypePath { path, .. }) = &field.ty {
             if let Some(PathSegment { ident, arguments }) = path.segments.last() {
                 match arguments {
                     PathArguments::None => ident.to_string(),
-                    PathArguments::AngleBracketed(AngleBracketedGenericArguments {
-                        args, ..
-                    }) => {
-                        if let Some(GenericArgument::Type(Type::Path(TypePath { path, .. }))) =
-                            args.last()
-                        {
-                            format!(
-                                "{}<{}>",
-                                ident,
-                                path.segments
-                                    .last()
-                                    .expect("ident.to_string(),path.segments.last()")
-                                    .ident
-                            )
+                    PathArguments::AngleBracketed(AngleBracketedGenericArguments { args, .. }) => {
+                        if let Some(GenericArgument::Type(Type::Path(TypePath { path, .. }))) = args.last() {
+                            format!("{}<{}>", ident, path.segments.last().expect("ident.to_string(),path.segments.last()").ident)
                         } else {
-                            panic!("{}", format!("generate create table is not support type {} -- {} -- AngleBracketed args is None", type_name, col_name))
+                            panic!(
+                                "{}",
+                                format!(
+                                    "generate create table is not support type {} -- {} -- AngleBracketed args is None",
+                                    type_name, col_name
+                                )
+                            )
                         }
                     }
                     PathArguments::Parenthesized(_) => panic!(
                         "{}",
-                        format!(
-                            "generate create table is not support type {} -- {} -- Parenthesized",
-                            type_name, col_name
-                        )
+                        format!("generate create table is not support type {} -- {} -- Parenthesized", type_name, col_name)
                     ),
                 }
             } else {
                 panic!(
                     "{}",
-                    format!(
-                        "generate create table is not support type {} -- {} -- not TypePath",
-                        type_name, col_name
-                    )
+                    format!("generate create table is not support type {} -- {} -- not TypePath", type_name, col_name)
                 )
             }
         } else {
             panic!(
                 "{}",
-                format!(
-                    "generate create table is not support type {} -- {} -- not TypePath",
-                    type_name, col_name
-                )
+                format!("generate create table is not support type {} -- {} -- not TypePath", type_name, col_name)
             )
         };
 
@@ -244,8 +219,7 @@ fn generate_table_script(type_name: &str, fields: &Fields) -> TableMeta {
             "i64" | "u64" | "i32" | "u32" | "i16" | "u16" => {
                 format!("{} INTEGER NOT NULL,", col_name)
             }
-            "Option<i64>" | "Option<u64>" | "Option<i32>" | "Option<u32>" | "Option<i16>"
-            | "Option<u16>" => format!("{} INTEGER DEFAULT NULL,", col_name),
+            "Option<i64>" | "Option<u64>" | "Option<i32>" | "Option<u32>" | "Option<i16>" | "Option<u16>" => format!("{} INTEGER DEFAULT NULL,", col_name),
             "f32" | "f64" => format!("{} REAL NOT NULL,", col_name),
             "Option<f32>" | "Option<f64>" => format!("{} REAL DEFAULT NULL,", col_name),
             "bool" => format!("{} BOOLEAN NOT NULL,", col_name),
@@ -267,24 +241,12 @@ fn generate_table_script(type_name: &str, fields: &Fields) -> TableMeta {
                                 }
                             }
                         } else {
-                            panic!(
-                                "{}",
-                                format!(
-                                    "generate create table is not support type {} -- {}",
-                                    type_name, col_name
-                                )
-                            )
+                            panic!("{}", format!("generate create table is not support type {} -- {}", type_name, col_name))
                         }
                     }
                 }
                 if temp_col.is_empty() {
-                    panic!(
-                        "{}",
-                        format!(
-                            "generate create table is not support type {} -- {}",
-                            type_name, col_name
-                        )
-                    )
+                    panic!("{}", format!("generate create table is not support type {} -- {}", type_name, col_name))
                 } else {
                     temp_col
                 }
@@ -307,14 +269,7 @@ fn generate_table_script(type_name: &str, fields: &Fields) -> TableMeta {
     }
 
     let mut template = cols;
-    template.insert_str(
-        0,
-        format!(
-            "CREATE TABLE IF NOT EXISTS {} (  \n",
-            gen_table_name(type_name)
-        )
-        .as_str(),
-    );
+    template.insert_str(0, format!("CREATE TABLE IF NOT EXISTS {} (  \n", gen_table_name(type_name)).as_str());
     template.push_str(" );\n");
     tm.template = template;
     tm

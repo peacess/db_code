@@ -266,7 +266,7 @@ pub fn generate_dao(tm: &TableMeta) {
 
             {
                 //update ol
-                let re = dao_.update(&mut m).await.expect("");
+                let re = dao_.update_ol(&mut m).await.expect("");
                 assert_eq!(1, re);
                 let get_m = dao_.get(&m.id).await.expect("").expect("");
                 assert_eq!(m.id, get_m.id);

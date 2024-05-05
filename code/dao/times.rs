@@ -11,7 +11,7 @@ impl Times {
 
     #[inline]
     pub fn to_ts(d: &DateTime<Local>) -> i64 {
-        d.naive_utc().timestamp_millis()
+        d.timestamp_millis()
     }
 
     pub fn to_local_date(ts: i64) -> DateTime<Local> {
@@ -30,7 +30,7 @@ impl Times {
 
     pub fn naive_to_china_date(n: NaiveDateTime) -> DateTime<FixedOffset> {
         let of = Self::china_offset();
-        of.timestamp_millis_opt(n.timestamp_millis() - of.local_minus_utc() as i64 * 1000)
+        of.timestamp_millis_opt(n.and_utc().timestamp_millis() - of.local_minus_utc() as i64 * 1000)
             .unwrap()
     }
 

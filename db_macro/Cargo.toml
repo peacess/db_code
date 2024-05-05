@@ -14,9 +14,9 @@ license.workspace = true
 [dependencies]
 log.workspace = true
 
-syn = { version = "2.0.48", features = ["full"] }
-quote = "1.0.35"
-proc-macro2 = "1.0.76"
+syn = { version = "2.0.60", features = ["full"] }
+quote = "1.0.36"
+proc-macro2 = "1.0.81"
 proc_macro_roids = "0.8.0"
 
 [lib]

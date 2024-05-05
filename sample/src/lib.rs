@@ -2,7 +2,7 @@ use db_code_macro::{DbDao, DbSub};
 
 mod dao;
 
-#[derive(sqlx::FromRow, DbDao, DbSub)]
+#[derive(Default,sqlx::FromRow, DbDao, DbSub)]
 pub struct CbTable {
     pub id: String,
     pub update_ts: i64,
