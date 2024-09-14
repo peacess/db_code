@@ -1,12 +1,10 @@
-use std::io::Write;
-use std::ops::Add;
-use std::{fs, path};
+use std::{fs, io::Write, ops::Add, path};
 
 use proc_macro_roids::IdentExt;
 use quote::{format_ident, quote};
 
-use super::db_meta::TableMeta;
-use super::kits::to_snake_name;
+use super::{db_meta::TableMeta, kits::to_snake_name};
+use crate::kits::T_VERSION;
 
 pub fn generate_dao(tm: &TableMeta) {
     let de = tm.derive_input.as_ref().expect("the derive_input is None");
@@ -70,7 +68,7 @@ pub fn generate_dao(tm: &TableMeta) {
         let id = format_ident!("{}", &tm.col_names[1]);
         t.push(quote!(q.bind(&m.#id)));
         tm.col_names[2..].iter().for_each(|col| {
-            if col != "version" {
+            if col != T_VERSION {
                 // let id = syn::Ident::new(col, m_name.span());
                 let id = format_ident!("{}", col);
                 t.push(quote!(.bind(&m.#id)));
@@ -80,8 +78,8 @@ pub fn generate_dao(tm: &TableMeta) {
         let id = format_ident!("{}", &tm.col_names[0]);
         t.push(quote!(.bind(&m.#id)));
         // let id = syn::Ident::new("version", m_name.span());
-        let id = format_ident!("version");
-        t.push(quote!(.bind(&m.#id)));
+        let id = format_ident!("{}", T_VERSION);
+        t.push(quote!(.bind(m.#id)));
         t
     };
 
@@ -296,7 +294,9 @@ pub fn generate_dao(tm: &TableMeta) {
     let file_name = get_dap_path(&to_snake_name(&tm.type_name).add("_dao.rs"));
     if fs::metadata(file_name.clone()).is_err() {
         let mut file = fs::File::create(file_name).expect("fs::File::create(file_name)");
-        let _ = file.write_all(gen.to_string().as_bytes());
+        let file_str = syn::parse_file(&gen.to_string()).expect("");
+        let format_str = prettyplease::unparse(&file_str);
+        let _ = file.write_all(format_str.as_bytes());
     } else {
         //file exist, do nothing
     }

@@ -1,15 +1,17 @@
-use std::cell::OnceCell;
-use std::collections::{BTreeMap, HashMap};
-use std::io::Write;
-use std::sync::Mutex;
-use std::{fs, path};
+use std::{
+    cell::OnceCell,
+    collections::{BTreeMap, HashMap},
+    fs,
+    io::Write,
+    path,
+    sync::Mutex,
+};
 
 use proc_macro_roids::DeriveInputStructExt;
 use syn::{AngleBracketedGenericArguments, Fields, GenericArgument, PathArguments, PathSegment, Type, TypePath};
 
-use crate::{dao, CARGO_BUILD_DIR_SQL};
-
 use super::kits::to_snake_name;
+use crate::{dao, CARGO_BUILD_DIR_SQL};
 
 const DB_SUB: &str = "db_sub";
 const FLATTEN: &str = "flatten";

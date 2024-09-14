@@ -1,9 +1,9 @@
-use crate::CbTable;
-use db_code::dao::{Dao, KitsDb, Times};
-use sqlx::query::Query;
-use sqlx::sqlite::SqliteArguments;
-use sqlx::{Pool, Sqlite, SqlitePool};
 use std::sync::Arc;
+
+use db_code::dao::{Dao, KitsDb, Times};
+use sqlx::{query::Query, sqlite::SqliteArguments, Pool, Sqlite, SqlitePool};
+
+use crate::CbTable;
 #[derive(Debug)]
 pub struct CbTableDao {
     pool: Arc<Pool<Sqlite>>,
@@ -57,7 +57,7 @@ impl CbTableDao {
         q.bind(&m.update_ts).bind(&m.version).bind(&m.id)
     }
     pub(super) fn _bind_update_ol<'a>(m: &'a CbTable, q: Query<'a, Sqlite, SqliteArguments<'a>>) -> Query<'a, Sqlite, SqliteArguments<'a>> {
-        q.bind(&m.update_ts).bind(&m.id).bind(&m.version)
+        q.bind(&m.update_ts).bind(&m.id).bind(m.version)
     }
 }
 impl Dao<CbTable> for CbTableDao {
@@ -113,9 +113,10 @@ impl Dao<CbTable> for CbTableDao {
 }
 #[cfg(test)]
 mod tests {
+    use db_code::dao::{Dao, KitsDb};
+
     use self::super::CbTableDao;
     use crate::CbTable;
-    use db_code::dao::{Dao, KitsDb};
     #[tokio::test]
     async fn cb_table_dao() {
         let pool = KitsDb::new_with_name("cb_table_dao.db", "init/sql_.sql").await.expect("");

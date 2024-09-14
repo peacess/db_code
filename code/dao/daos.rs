@@ -20,10 +20,14 @@ pub trait Dao<M> {
     fn list(&self) -> impl std::future::Future<Output = Result<Vec<M>, sqlx::Error>> + Send;
 }
 
-///
 pub struct MBase {
     pub id: String,
     /// timestamp, ms
     pub update_ts: i64,
     pub version: i64,
+}
+impl MBase {
+    pub const T_ID: &'static str = "id";
+    pub const T_UPDATE_TS: &'static str = "update_ts";
+    pub const T_VERSION: &'static str = "version";
 }

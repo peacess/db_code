@@ -1,4 +1,4 @@
-pub(crate) fn to_snake_name(name: &String) -> String {
+pub(crate) fn to_snake_name(name: &str) -> String {
     let chs = name.chars();
     let mut new_name = String::new();
     let chs_len = name.len();
@@ -14,3 +14,7 @@ pub(crate) fn to_snake_name(name: &String) -> String {
     }
     new_name
 }
+
+// pub const T_ID: &'static str = "id";
+// pub const T_UPDATE_TS: &'static str = "update_ts";
+pub const T_VERSION: &'static str = "version";

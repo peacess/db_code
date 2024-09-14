@@ -1,5 +1,5 @@
 [workspace.package]
-version = "0.1.3"
+version = "0.1.4"
 edition = "2021"
 authors = ["Andy <peacess@163.com>"]
 description = "Generate Db code"
@@ -15,13 +15,13 @@ members=[
 ]
 
 [workspace.dependencies]
-log = { version = "0.4.21", features = ["max_level_debug", "release_max_level_info"] }
+log = { version = "0.4.22", features = ["max_level_debug", "release_max_level_info"] }
 chrono = "0.4.38"
-rust_kits = { version = "0.1.2", git = "https://github.com/peacess/rust.git" }
-sqlx = { version = "0.7.4", features = [ "runtime-tokio-rustls" , "sqlite" ] }
+rust_kits = { version = "0.1.5"}
+sqlx = { version = "0.8.2", features = [ "runtime-tokio-rustls" , "sqlite" ] }
 xid = "1.1.1"
-tokio = { version = "1.37.0", features = ["full"] }
-
+tokio = { version = "1.40.0", features = ["full"] }
+prettyplease = "0.2.22"
 
 #[lib]
 #name="db_code"

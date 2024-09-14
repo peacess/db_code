@@ -38,13 +38,11 @@ impl Times {
         FixedOffset::east_opt(8 * 3600).unwrap()
     }
 
-    ///
     pub fn day_of_year() -> i32 {
         let t = Local::now().ordinal();
         t as i32
     }
 
-    ///
     pub fn day_of_year_(d: &DateTime<Local>) -> i32 {
         let t = d.ordinal();
         t as i32
