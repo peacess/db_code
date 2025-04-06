@@ -480,7 +480,7 @@ checksum = "575f75dfd25738df5b91b8e43e14d44bda14637a58fae779fd2b064f8bf3e010"
 
 [[package]]
 name = "db_code"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "chrono",
  "log",
@@ -491,7 +491,7 @@ dependencies = [
 
 [[package]]
 name = "db_code_macro"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "log",
  "prettyplease",
@@ -503,7 +503,7 @@ dependencies = [
 
 [[package]]
 name = "db_code_sample"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "db_code",
  "db_code_macro",
