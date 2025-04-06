@@ -51,13 +51,13 @@ impl CbTableDao {
         format!("select {} from {}", CbTableDao::columns(), CbTableDao::TT)
     }
     pub(super) fn _bind_add<'a>(m: &'a CbTable, q: Query<'a, Sqlite, SqliteArguments<'a>>) -> Query<'a, Sqlite, SqliteArguments<'a>> {
-        q.bind(&m.id).bind(&m.update_ts).bind(&m.version)
+        q.bind(&m.id).bind(m.update_ts).bind(m.version)
     }
     pub(super) fn _bind_update<'a>(m: &'a CbTable, q: Query<'a, Sqlite, SqliteArguments<'a>>) -> Query<'a, Sqlite, SqliteArguments<'a>> {
-        q.bind(&m.update_ts).bind(&m.version).bind(&m.id)
+        q.bind(m.update_ts).bind(m.version).bind(&m.id)
     }
     pub(super) fn _bind_update_ol<'a>(m: &'a CbTable, q: Query<'a, Sqlite, SqliteArguments<'a>>) -> Query<'a, Sqlite, SqliteArguments<'a>> {
-        q.bind(&m.update_ts).bind(&m.id).bind(m.version)
+        q.bind(m.update_ts).bind(&m.id).bind(m.version)
     }
 }
 impl Dao<CbTable> for CbTableDao {

@@ -1,5 +1,4 @@
 use std::{
-    cell::OnceCell,
     collections::{BTreeMap, HashMap},
     fs,
     io::Write,
@@ -30,10 +29,11 @@ pub struct TableMeta {
     //key: sub struct name, value: {name}
     //Sample: Eee: {Eee}
     subs: HashMap<String, String>,
-    pub write_file: bool,
+    // pub write_file: bool,
     pub is_sub: bool,
 
-    pub derive_input: Option<syn::DeriveInput>,
+    // pub derive_input: Option<syn::DeriveInput>,
+    pub ident_name: Option<String>,
 }
 
 impl TableMeta {
@@ -61,8 +61,9 @@ pub struct DbMeta {
 impl DbMeta {
     ///使用 static 变量，生成一个线程安全的共享对象
     pub fn get() -> &'static Mutex<DbMeta> {
-        static mut INSTANCE: OnceCell<Mutex<DbMeta>> = OnceCell::new();
-        unsafe { INSTANCE.get_or_init(|| Mutex::new(DbMeta::default())) }
+        static INSTANCE: std::sync::OnceLock<Mutex<DbMeta>> = std::sync::OnceLock::new();
+        let t = INSTANCE.get_or_init(|| Mutex::new(DbMeta::default()));
+        t
     }
 
     /// 加入表
@@ -146,7 +147,7 @@ impl DbMeta {
     fn generate_table_meta(&mut self, ast: &syn::DeriveInput) -> TableMeta {
         let mut tm = generate_table_script(&ast.ident.to_string(), ast.fields());
         tm.template.insert_str(0, format!("-- {}\n", ast.ident).as_str());
-        tm.derive_input = Some(ast.clone());
+        tm.ident_name = Some(ast.ident.to_string());
         tm
     }
 
@@ -307,7 +308,7 @@ fn get_path(short_name: &str) -> String {
         let _ = fs::create_dir(cur.as_str());
     }
     let full = path::Path::new(cur.as_str()).join(short_name);
-    return full.to_str().expect("full.to_str().").to_owned();
+    full.to_str().expect("full.to_str().").to_owned()
 }
 
 // fn db_field_name(name: &syn::Ident, fields: &Fields) -> proc_macro2::TokenStream {

@@ -17,4 +17,4 @@ pub(crate) fn to_snake_name(name: &str) -> String {
 
 // pub const T_ID: &'static str = "id";
 // pub const T_UPDATE_TS: &'static str = "update_ts";
-pub const T_VERSION: &'static str = "version";
+pub const T_VERSION: &str = "version";

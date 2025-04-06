@@ -1,15 +1,14 @@
 use std::{fs, io::Write, ops::Add, path};
 
-use proc_macro_roids::IdentExt;
 use quote::{format_ident, quote};
 
 use super::{db_meta::TableMeta, kits::to_snake_name};
 use crate::kits::T_VERSION;
 
 pub fn generate_dao(tm: &TableMeta) {
-    let de = tm.derive_input.as_ref().expect("the derive_input is None");
-    let m_name = de.ident.clone();
-    let dao_name = m_name.clone().append("Dao");
+    let de = tm.ident_name.as_ref().expect("the derive_input is None");
+    let m_name = format_ident!("{}", &de);
+    let dao_name = format_ident!("{}Dao", &de);
     let table_name = to_snake_name(&tm.type_name);
     let test_name = syn::Ident::new(&to_snake_name(&dao_name.to_string()), m_name.span());
     let db_name = to_snake_name(&dao_name.to_string()).add(".db");
@@ -83,7 +82,7 @@ pub fn generate_dao(tm: &TableMeta) {
         t
     };
 
-    let gen = quote!(
+    let gen_code = quote!(
     use std::sync::Arc;
 
     use sqlx::{Pool, Sqlite, SqlitePool};
@@ -292,18 +291,31 @@ pub fn generate_dao(tm: &TableMeta) {
         );
 
     let file_name = get_dap_path(&to_snake_name(&tm.type_name).add("_dao.rs"));
-    if fs::metadata(file_name.clone()).is_err() {
-        let mut file = fs::File::create(file_name).expect("fs::File::create(file_name)");
-        let file_str = syn::parse_file(&gen.to_string()).expect("");
+    let file_meta = fs::metadata(file_name.clone());
+    let file_op = match file_meta {
+        Ok(meta) => {
+            if meta.len() < 10 {
+                let file = fs::File::create(file_name).expect("fs::File::create(file_name)");
+                Some(file)
+            } else {
+                None
+            }
+        }
+        Err(_) => {
+            let file = fs::File::create(file_name).expect("fs::File::create(file_name)");
+            Some(file)
+        }
+    };
+    if let Some(mut file) = file_op {
+        let file_str = syn::parse_file(&gen_code.to_string()).expect("");
         let format_str = prettyplease::unparse(&file_str);
         let _ = file.write_all(format_str.as_bytes());
-    } else {
-        //file exist, do nothing
     }
 }
 
 fn get_dap_path(short_name: &str) -> String {
     const CARGO_MANIFEST_DIR: &str = "CARGO_MANIFEST_DIR";
+
     let mut cur = "dao".to_owned();
     if let Ok(p) = std::env::var(CARGO_MANIFEST_DIR) {
         let p = path::Path::new(p.as_str()).join("src").join(cur);
@@ -314,5 +326,5 @@ fn get_dap_path(short_name: &str) -> String {
         let _ = fs::create_dir(cur.as_str());
     }
     let full = path::Path::new(cur.as_str()).join(short_name);
-    return full.to_str().expect("full.to_str().").to_owned();
+    full.to_str().expect("full.to_str().").to_owned()
 }
