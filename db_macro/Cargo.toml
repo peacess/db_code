@@ -12,13 +12,10 @@ license.workspace = true
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-log.workspace = true
-prettyplease.workspace = true
+syn.workspace =true
+quote.workspace = true
 
-syn = { version = "2.0.77", features = ["full"] }
-quote = "1.0.37"
-proc-macro2 = "1.0.86"
-proc_macro_roids = "0.8.0"
+db_code_macro_lib = { path = "../db_macro_lib" }
 
 [lib]
 proc-macro = true
@@ -26,5 +23,5 @@ path = "./lib.rs"
 
 [features]
 default = ["sql", "dao"]
-sql = []
-dao = []
+sql = ["db_code_macro_lib/sql"]
+dao = ["db_code_macro_lib/dao"]

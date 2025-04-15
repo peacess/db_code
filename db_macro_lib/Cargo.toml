@@ -1,5 +1,5 @@
 [package]
-name = "db_code"
+name = "db_code_macro_lib"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
@@ -10,14 +10,13 @@ keywords.workspace = true
 license.workspace = true
 
 [dependencies]
-log.workspace = true
-chrono.workspace = true
-sqlx.workspace = true
-xid = {workspace = true}
-rust_kits.workspace = true
+proc-macro2.workspace = true
+quote.workspace = true
+syn.workspace = true
+proc_macro_roids.workspace = true
+prettyplease.workspace = true
 
-[lib]
-name="db_code"
-path="./lib.rs"
-
-
+[features]
+default = ["sql", "dao"]
+sql = []
+dao = []

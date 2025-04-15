@@ -11,17 +11,23 @@ license = "Apache-2.0"
 [workspace]
 resolver = "2"
 members=[
-    "db_macro","code","sample"
+    "db_macro","code","samples", "db_macro_lib"
 ]
 
 [workspace.dependencies]
 log = { version = "0.4.27", features = ["max_level_debug", "release_max_level_info"] }
 chrono = "0.4.40"
 rust_kits = { version = "0.1.6"}
-sqlx = { version = "0.8.3", features = [ "runtime-tokio-rustls" , "sqlite" ] }
+sqlx = { version = "0.8.4", features = [ "runtime-tokio-rustls" , "sqlite" ] }
 xid = "1.1.1"
-tokio = { version = "1.44.1", features = ["full"] }
-prettyplease = "0.2.31"
+tokio = { version = "1.44.2", features = ["full"] }
+prettyplease = "0.2.32"
+convert_case = "0.8.0"
+
+syn = { version = "2.0.100", features = ["full"] }
+quote = "1.0.40"
+proc-macro2 = "1.0.94"
+proc_macro_roids = "0.8.0"
 
 #[lib]
 #name="db_code"

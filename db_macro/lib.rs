@@ -1,14 +1,9 @@
+use db_code_macro_lib::db_meta;
 use proc_macro::TokenStream;
 use quote::quote;
 use syn::{parse_macro_input, DeriveInput};
 
-mod dao;
-mod db_meta;
-mod kits;
-
-const CARGO_BUILD_DIR_SQL: &str = "CARGO_BUILD_DIR_SQL_";
-
-#[proc_macro_derive(DbDao, attributes(db_sub))]
+#[proc_macro_derive(DbDao)]
 pub fn db(input: TokenStream) -> TokenStream {
     let ast = parse_macro_input!(input as DeriveInput);
     let mut meta = db_meta::DbMeta::get().lock().expect("db_meta::DbMeta::get().lock()");
