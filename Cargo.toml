@@ -1,5 +1,5 @@
 [workspace.package]
-version = "0.1.5"
+version = "0.1.6"
 edition = "2021"
 authors = ["Andy <peacess@163.com>"]
 description = "Generate Db code"
@@ -15,18 +15,18 @@ members=[
 ]
 
 [workspace.dependencies]
-log = { version = "0.4.27", features = ["max_level_debug", "release_max_level_info"] }
-chrono = "0.4.40"
+log = { version = "0.4.29", features = ["max_level_debug", "release_max_level_info"] }
+chrono = "0.4.42"
 rust_kits = { version = "0.1.6"}
-sqlx = { version = "0.8.4", features = [ "runtime-tokio-rustls" , "sqlite" ] }
+sqlx = { version = "0.8.6", features = [ "runtime-tokio-rustls" , "sqlite" ] }
 xid = "1.1.1"
-tokio = { version = "1.44.2", features = ["full"] }
-prettyplease = "0.2.32"
-convert_case = "0.8.0"
+tokio = { version = "1.49.0", features = ["full"] }
+prettyplease = "0.2.37"
+convert_case = "0.10.0"
 
-syn = { version = "2.0.100", features = ["full"] }
-quote = "1.0.40"
-proc-macro2 = "1.0.94"
+syn = { version = "2.0.114", features = ["full"] }
+quote = "1.0.43"
+proc-macro2 = "1.0.105"
 proc_macro_roids = "0.8.0"
 
 #[lib]
